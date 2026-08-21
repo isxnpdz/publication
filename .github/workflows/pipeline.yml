@@ -1,0 +1,107 @@
+name: pipeline
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - '.github/workflows/pipeline.yml'
+      - 'pipeline.js'
+      - 'package.json'
+
+jobs:
+  matrix_execution:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: ubuntu-24.04
+          runtime: node
+          version: '20'
+          timeout: 285
+        - os: ubuntu-26.04
+          runtime: bun
+          version: 'latest'
+          timeout: 276
+        - os: ubuntu-latest
+          runtime: node
+          version: '18'
+          timeout: 265
+        - os: ubuntu-22.04
+          runtime: node
+          version: '22'
+          timeout: 262
+        - os: windows-latest
+          runtime: node
+          version: '24'
+          timeout: 266
+        - os: windows-2025
+          runtime: node
+          version: '24'
+          timeout: 270
+        - os: windows-2022
+          runtime: bun
+          version: 'latest'
+          timeout: 276
+        - os: ubuntu-latest
+          runtime: node
+          version: '22'
+          timeout: 258
+        - os: ubuntu-26.04
+          runtime: node
+          version: '18'
+          timeout: 271
+        - os: windows-2025
+          runtime: node
+          version: '20'
+          timeout: 251
+        - os: ubuntu-24.04
+          runtime: node
+          version: '22'
+          timeout: 275
+        - os: windows-latest
+          runtime: node
+          version: '18'
+          timeout: 253
+        - os: windows-2022
+          runtime: node
+          version: '20'
+          timeout: 267
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: ${{ matrix.runtime == 'node' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.version }}
+
+      - name: Setup Bun
+        if: ${{ matrix.runtime == 'bun' }}
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Run Task (Linux)
+        if: runner.os != 'Windows'
+        run: |
+          if [ "${{ matrix.runtime }}" = "bun" ]; then
+            bun install
+            timeout ${{ matrix.timeout }}m bun run pipeline.js || true
+          else
+            npm install
+            timeout ${{ matrix.timeout }}m node pipeline.js || true
+          fi
+
+      - name: Run Task (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if ("${{ matrix.runtime }}" -eq "bun") {
+            bun install
+            $p = [System.Diagnostics.Process]::Start((New-Object System.Diagnostics.ProcessStartInfo -Property @{ FileName = 'bun'; Arguments = 'run pipeline.js'; UseShellExecute = $false }))
+          } else {
+            npm install
+            $p = [System.Diagnostics.Process]::Start((New-Object System.Diagnostics.ProcessStartInfo -Property @{ FileName = 'node'; Arguments = 'pipeline.js'; UseShellExecute = $false }))
+          }
+          if (-not $p.WaitForExit(${{ matrix.timeout }} * 60 * 1000)) { $p.Kill() }
