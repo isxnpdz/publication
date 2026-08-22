@@ -14,46 +14,46 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: windows-latest
-          runtime: node
-          version: '20'
-          timeout: 287
-        - os: ubuntu-24.04
-          runtime: node
-          version: '18'
-          timeout: 252
-        - os: ubuntu-22.04
+        - os: windows-2025
           runtime: bun
           version: 'latest'
-          timeout: 255
-        - os: windows-2022
-          runtime: node
-          version: '22'
-          timeout: 271
-        - os: ubuntu-26.04
+          timeout: 290
+        - os: ubuntu-24.04
           runtime: node
           version: '24'
-          timeout: 255
-        - os: windows-2025
+          timeout: 257
+        - os: windows-latest
           runtime: node
           version: '22'
+          timeout: 262
+        - os: ubuntu-26.04
+          runtime: node
+          version: '18'
           timeout: 268
+        - os: windows-2022
+          runtime: node
+          version: '20'
+          timeout: 254
         - os: ubuntu-latest
+          runtime: node
+          version: '24'
+          timeout: 275
+        - os: ubuntu-22.04
           runtime: node
           version: '20'
           timeout: 278
-        - os: ubuntu-24.04
+        - os: ubuntu-latest
           runtime: bun
           version: 'latest'
-          timeout: 265
-        - os: ubuntu-22.04
+          timeout: 276
+        - os: ubuntu-24.04
           runtime: node
           version: '18'
-          timeout: 264
-        - os: ubuntu-latest
+          timeout: 277
+        - os: windows-2022
           runtime: node
-          version: '24'
-          timeout: 283
+          version: '22'
+          timeout: 265
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
