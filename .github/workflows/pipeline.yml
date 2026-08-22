@@ -14,58 +14,62 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: ubuntu-24.04
+        - os: ubuntu-latest
           runtime: node
-          version: '20'
-          timeout: 285
+          version: '22'
+          timeout: 266
         - os: ubuntu-26.04
           runtime: bun
           version: 'latest'
-          timeout: 276
-        - os: ubuntu-latest
-          runtime: node
-          version: '18'
-          timeout: 265
-        - os: ubuntu-22.04
-          runtime: node
-          version: '22'
-          timeout: 262
+          timeout: 279
         - os: windows-latest
           runtime: node
-          version: '24'
+          version: '20'
           timeout: 266
         - os: windows-2025
           runtime: node
-          version: '24'
-          timeout: 270
-        - os: windows-2022
-          runtime: bun
-          version: 'latest'
-          timeout: 276
-        - os: ubuntu-latest
-          runtime: node
-          version: '22'
-          timeout: 258
-        - os: ubuntu-26.04
-          runtime: node
           version: '18'
-          timeout: 271
-        - os: windows-2025
-          runtime: node
-          version: '20'
-          timeout: 251
+          timeout: 263
         - os: ubuntu-24.04
           runtime: node
+          version: '24'
+          timeout: 287
+        - os: windows-2022
+          runtime: node
           version: '22'
-          timeout: 275
+          timeout: 289
+        - os: ubuntu-22.04
+          runtime: bun
+          version: 'latest'
+          timeout: 284
+        - os: ubuntu-24.04
+          runtime: node
+          version: '24'
+          timeout: 256
+        - os: ubuntu-latest
+          runtime: node
+          version: '20'
+          timeout: 268
         - os: windows-latest
           runtime: node
           version: '18'
+          timeout: 289
+        - os: ubuntu-26.04
+          runtime: node
+          version: '24'
+          timeout: 251
+        - os: ubuntu-22.04
+          runtime: node
+          version: '20'
+          timeout: 286
+        - os: windows-2025
+          runtime: bun
+          version: 'latest'
           timeout: 253
         - os: windows-2022
           runtime: node
-          version: '20'
-          timeout: 267
+          version: '18'
+          timeout: 262
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
